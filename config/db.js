@@ -1,13 +1,24 @@
-const mysql = require('mysql');
+const mysql = require("mysql2");
 
-const pool = mysql.createPool({
-    host: 'DESKTOP-LRMSUM0',
-    user: 'root@localhost',
-    password: 'dxtx998',
-    database: 'user',
-    port: '3306',
-  });
+const pool = mysql
+  .createPool({
+    host: "localhost",
+    user: "root",
+    password: "123456",
+    database: "user",
+  })
+  .promise();
 
+const getConnection = async () => {
+  try {
+    const [rows, fields] = await pool.query("SELECT * FROM users");
+    console.log(rows);
+  } catch (err) {
+    console.error("Error executing query:", err);
+  } finally {
+    pool.end();
+  }
+};
 
-  
-  module.exports = pool;
+// Execute the function to test the connection and query
+getConnection();
