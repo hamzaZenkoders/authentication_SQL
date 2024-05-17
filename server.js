@@ -20,6 +20,7 @@ if (db) {
 } */
 
 //url extender
-app.use("/api/user", require("./routes/studentRoutes.js"));
+app.use("/api/student", require("./routes/studentRoutes.js"));
+app.use("/api/teacher",require("./routes/teacherRoutes.js"));
 
 app.listen(port, () => console.log(`App is listening on ${port}`));

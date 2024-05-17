@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const studentSignUp = async (req, res) => {
   try {
-    const { name, email,password } = req.body;
+    const { name, email, address, contact, role,password } = req.body;
     //address, contact, role, hashedPassword
     
 
@@ -35,8 +35,8 @@ const studentSignUp = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newStudent = await pool.query(
-      `INSERT INTO student (student_name, email, password) VALUES (?, ?, ?, ?, ?, ?)`,
-      [name, email, hashedPassword]
+      `INSERT INTO student (student_name, email, address, contact, role, password) VALUES (?, ?, ?, ?, ?, ?)`,
+      [name, email, address, contact, role, hashedPassword]
   );
   
 
@@ -98,20 +98,65 @@ const userSignIn = async(req,res)=>{
   }
  
 }
+const fetchStudentData = async (req, res) => {
+  try {
+    const { id } = req.params;
+   
+    const [rows] = await pool.query("SELECT * FROM student WHERE id = ?", [id]);
+    console.log("rows student data :",rows);
+    const studentData = rows[0]; // Assuming the query returns an array of results
 
-const fetchStudentData = async (req,res) =>{
-  try{
-    const {id} = req.params;
-
-    const foundStudent = pool.query("Select * from student where id = ?",[id]);
-
-    if(!foundStudent){
-      res.status(200);
+    if (!studentData) {
+      return res.status(404).json({ message: "Student not found" });
     }
-  }catch(err){}
+
+    res.json(studentData);
+
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).send('Controller Error: ' + err.message);
+  }
+};
+
+const updateStudentData = async (req,res) =>{
+  try {
+    const { id } = req.params;
+    const {} = req.body;
+   
+    const [rows] = await pool.query("SELECT * FROM student WHERE id = ?", [id]);
+    console.log("rows student data :",rows);
+    const studentData = rows[0]; // Assuming the query returns an array of results
+
+    if (!studentData) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    res.json(studentData);
+
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).send('Controller Error: ' + err.message);
+  }
 }
 
+const deleteStudentData = async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    // Construct and execute the delete query
+    const [result] = await pool.query('DELETE FROM student WHERE id = ?', [id]);
+
+    // Check if the student was found and deleted
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    res.json({ message: "Student deleted successfully" });
+  } catch (err) {
+    const status = err.status || 500;
+    res.status(status).send('Controller Error: ' + err.message);
+  }
+};
 
 
 
@@ -143,4 +188,4 @@ const generateJWT  = async (id,role) =>{
   })
 }
 
-module.exports = { studentSignUp,userSignIn,test,fetchStudentData };
+module.exports = { studentSignUp,userSignIn,test,fetchStudentData,updateStudentData,deleteStudentData };
