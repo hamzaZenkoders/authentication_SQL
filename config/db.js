@@ -5,7 +5,7 @@ const pool = mysql
     host: "localhost",
     user: "root",
     password: "dxtx998",
-    database: "user",
+    database: "project",
   })
 
 

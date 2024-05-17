@@ -1,8 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { userSignUp, userSignIn } = require("../controllers/userController");
+const { studentSignUp, userSignIn,test,fetchStudentData } = require("../controllers/studentController");
+const {authorizeStudent} = require("../middlewares/authMiddleware");
 
-router.post("/signUp",userSignUp);
-router.post("/signIn",userSignIn);
+router.post("/signUp",studentSignUp); //create student
+router.post("/signIn",userSignIn); //login student
 
-module.exports = router;
+router.get("/getStudentData",fetchStudentData);
+
+
+router.get("/test",authorizeStudent(['student']),test);
+router.get("/student/profile", authorizeStudent(["student"]), (req, res) => {
+    res.json({ message: "Student profile" });
+  });
+
+module.exports = router;   
