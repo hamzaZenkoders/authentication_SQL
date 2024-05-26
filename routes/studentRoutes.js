@@ -1,15 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const { studentSignUp, userSignIn,test,fetchStudentData,updateStudentData,deleteStudentData } = require("../controllers/studentController");
-const {authorizeStudent} = require("../middlewares/authMiddleware");
+const {
+  studentSignUp,
+  studentSignIn,
+  fetchStudentData,
+  updateStudentData,
+  deleteStudentData,
+  fetchAllStudentsData,
+} = require("../controllers/studentController");
+const { authorizeToken } = require("../middlewares/authMiddleware");
 
-router.post("/signUp",studentSignUp); //create student
-router.post("/signIn",userSignIn); //login student
+router.post("/signUp", studentSignUp); //create student
+router.post("/signIn", studentSignIn); //login student
 
-router.get("/getStudentData/:id",authorizeStudent(['student']),fetchStudentData); //get student
+router.get("/getStudentData/:id", authorizeToken, fetchStudentData); //get student
 
-router.put("updateStudent/:id",authorizeStudent(['student']),updateStudentData); //update student
+router.get("/getStudentsData", fetchAllStudentsData); //get students
 
-router.delete("/deleteStudent/:id",authorizeStudent(['student']),deleteStudentData); //delete student
+router.put("updateStudent/:id", authorizeToken, updateStudentData); //update student
 
-module.exports = router;   
+router.delete("/deleteStudent/:id", authorizeToken, deleteStudentData); //delete student
+
+module.exports = router;

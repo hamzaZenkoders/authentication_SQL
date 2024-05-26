@@ -1,15 +1,13 @@
 const mysql = require("mysql2/promise");
 
-const pool = mysql
-  .createPool({
-    host: "localhost",
-    user: "root",
-    password: "dxtx998",
-    database: "project",
-  })
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "123456",
+  database: "project",
+});
 
-
-  module.exports = {pool};
+module.exports = { pool };
 
 /*const getConnection = async () => {
   try {

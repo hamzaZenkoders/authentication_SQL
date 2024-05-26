@@ -1,6 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
-require('dotenv').config();
+require("dotenv").config();
 
 //const { getConnection } = require("./config/db.js");
 //const db = require("./config/db");
@@ -21,6 +21,6 @@ if (db) {
 
 //url extender
 app.use("/api/student", require("./routes/studentRoutes.js"));
-app.use("/api/teacher",require("./routes/teacherRoutes.js"));
-
+app.use("/api/teacher", require("./routes/teacherRoutes.js"));
+app.use("/api/course", require("./routes/courseRoutes.js"));
 app.listen(port, () => console.log(`App is listening on ${port}`));

@@ -1,8 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const {teacherSignUp} = require("../controllers/teacherController");
+const {
+  teacherSignUp,
+  teacherSignIn,
+  getAllTeachers,
+  getTeacher,
+  deleteTeacher,
+} = require("../controllers/teacherController");
+const { authorizeToken } = require("../middlewares/authMiddleware");
 
-router.post("/signUp",teacherSignUp);
+router.post("/signUp", teacherSignUp);
+router.post("/signIn", teacherSignIn);
+router.get("/getTeachers", getAllTeachers);
+router.get("/getTeacher/:id", authorizeToken, getTeacher);
+router.delete("/deleteTeacher/:id", authorizeToken, deleteTeacher);
 
-
-module.exports = router;   
+module.exports = router;
