@@ -6,6 +6,7 @@ const {
   findTeacherByID,
   deleteTeacherByID,
   generateJWT,
+  updatingTeacherData,
 } = require("../services/teacherService");
 
 require("dotenv").config();
@@ -130,10 +131,52 @@ const deleteTeacher = async (req, res) => {
   }
 };
 
+const updateTeacherData = async () => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    const [rows] = await findTeacherByID(id);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+
+    const existingData = rows[0];
+    const updatedData = { ...existingData, ...data };
+
+    // Prepare the fields to be updated
+    const { name, position, email, address, contact, role } = updatedData;
+
+    console.log("updatedData", updatedData);
+
+    const modifiedTeacherData = await updatingTeacherData(
+      id,
+      name,
+      position,
+      email,
+      address,
+      contact,
+      role,
+      password
+    );
+
+    if (modifiedTeacherData.affectedRows > 0) {
+      res.status(200).json(updatedData);
+    } else {
+      throw new Error("Unable to update the data");
+    }
+  } catch (err) {
+    const status = err.status || 500;
+    return res.status(status).json({ error: err.message });
+  }
+};
+
 module.exports = {
   teacherSignUp,
   teacherSignIn,
   getAllTeachers,
   getTeacher,
   deleteTeacher,
+  updateTeacherData,
 };

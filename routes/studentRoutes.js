@@ -17,7 +17,7 @@ router.get("/getStudentData/:id", authorizeToken, fetchStudentData); //get stude
 
 router.get("/getStudentsData", fetchAllStudentsData); //get students
 
-router.put("updateStudent/:id", authorizeToken, updateStudentData); //update student
+router.patch("/updateStudent/:id", authorizeToken, updateStudentData); //update student
 
 router.delete("/deleteStudent/:id", authorizeToken, deleteStudentData); //delete student
 

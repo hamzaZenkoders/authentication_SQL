@@ -23,4 +23,5 @@ if (db) {
 app.use("/api/student", require("./routes/studentRoutes.js"));
 app.use("/api/teacher", require("./routes/teacherRoutes.js"));
 app.use("/api/course", require("./routes/courseRoutes.js"));
+app.use("/api/enrollment", require("./routes/enrollmentRoutes.js"));
 app.listen(port, () => console.log(`App is listening on ${port}`));

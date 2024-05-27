@@ -100,8 +100,30 @@ const deleteStudent = async (id) => {
   return [rows];
 };
 
+//update student data
+
+const updatingStudentData = async (
+  id,
+  student_name,
+  email,
+  address,
+  contact,
+  role,
+  password
+) => {
+  const [rows] = await pool.query(
+    `UPDATE student 
+     SET student_name = ?, email = ?, address = ?, contact = ?, role = ?, password = ? 
+     WHERE id = ?`,
+    [student_name, email, address, contact, role, password, id]
+  );
+
+  return rows;
+};
+
 module.exports = {
   studentSignUpFn,
+  updatingStudentData,
   studentSignInFn,
   findStudentByID,
   findAllStudents,

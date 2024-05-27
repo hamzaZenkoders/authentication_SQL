@@ -6,6 +6,7 @@ const {
   findAllStudents,
   deleteStudent,
   generateJWT,
+  updatingStudentData,
 } = require("../services/studentService");
 require("dotenv").config();
 
@@ -92,17 +93,43 @@ const fetchStudentData = async (req, res) => {
 const updateStudentData = async (req, res) => {
   try {
     const { id } = req.params;
-    const {} = req.body;
+    const data = req.body;
 
-    const [rows] = await pool.query("SELECT * FROM student WHERE id = ?", [id]);
-    console.log("rows student data :", rows);
-    const studentData = rows[0]; // Assuming the query returns an array of results
+    const [rows] = await findStudentByID(id);
+    // console.log("Existing student data:", rows);
 
-    if (!studentData) {
+    if (rows.length === 0) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    res.json(studentData);
+    // Merge the existing data with the new data
+    const existingData = rows[0];
+    const updatedData = { ...existingData, ...data };
+
+    // Prepare the fields to be updated
+    const { student_name, email, address, contact, role, password } =
+      updatedData;
+
+    console.log("updatedData", updatedData);
+
+    // Update the student data in the database
+    const modifiedStudentData = await updatingStudentData(
+      id,
+      student_name,
+      email,
+      address,
+      contact,
+      role,
+      password
+    );
+
+    if (modifiedStudentData.affectedRows > 0) {
+      res.status(200).json(updatedData);
+    } else {
+      throw new Error("Unable to update the data");
+    }
+
+    // Respond with the updated student data
   } catch (err) {
     const status = err.status || 500;
     res.status(status).send("Controller Error: " + err.message);

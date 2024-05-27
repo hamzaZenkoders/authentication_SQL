@@ -98,6 +98,26 @@ const getAllTeachersService = async () => {
   return [rows];
 };
 
+const updatingTeacherData = async (
+  id,
+  name,
+  position,
+  email,
+  address,
+  contact,
+  role,
+  password
+) => {
+  const [rows] = await pool.query(
+    `UPDATE teacher
+     SET name = ?,position= ?, email = ?, address = ?, contact = ?, role = ?, password = ? 
+     WHERE id = ?`,
+    [name, position, email, address, contact, role, password, id]
+  );
+
+  return rows;
+};
+
 //generate JWT function
 
 const generateJWT = (id, role) => {
@@ -109,6 +129,7 @@ const generateJWT = (id, role) => {
 module.exports = {
   teacherSignUpService,
   getAllTeachersService,
+  updatingTeacherData,
   teacherSignInService,
   findTeacherByID,
   deleteTeacherByID,

@@ -6,6 +6,7 @@ const {
   getAllTeachers,
   getTeacher,
   deleteTeacher,
+  updateTeacherData,
 } = require("../controllers/teacherController");
 const { authorizeToken } = require("../middlewares/authMiddleware");
 
@@ -14,5 +15,6 @@ router.post("/signIn", teacherSignIn);
 router.get("/getTeachers", getAllTeachers);
 router.get("/getTeacher/:id", authorizeToken, getTeacher);
 router.delete("/deleteTeacher/:id", authorizeToken, deleteTeacher);
+router.patch("/updateStudent/:id", authorizeToken, updateTeacherData); //update teacher
 
 module.exports = router;
